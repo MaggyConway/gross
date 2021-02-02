@@ -18,6 +18,9 @@ const settings = {
 }
 Vue.use(YmapPlugin, settings)
 
+import VueSocialSharing from 'vue-social-sharing'
+Vue.use(VueSocialSharing)
+
 
 import App from './App.vue'
 
@@ -27,5 +30,6 @@ new Vue({
   ElementUI,
   router,
   YmapPlugin,
+  VueSocialSharing,
   render: h => h(App)
 })

@@ -2,8 +2,22 @@
 	<div class="share">
 		<p>поделиться</p>
 		<div class="share__icons">
-			<span class="fb" />
-			<span class="vk" />
+			<ShareNetwork
+				network="facebook"
+				url="https://market.yandex.ru/shop--firmennyi-magazin-gross/545370/reviews"
+				quote="Отзывы о магазине Фирменный магазин GROSS"
+				hashtags="gross_market"
+				class="fb"
+				>
+			</ShareNetwork>
+			<ShareNetwork
+				network="vk"
+				title="гросс маркет"
+				url="https://market.yandex.ru/shop--firmennyi-magazin-gross/545370/reviews"
+				description="Отзывы о магазине Фирменный магазин GROSS"
+				class="vk"
+				>
+			</ShareNetwork>
 		</div>
 	</div>
 </template>
@@ -38,7 +52,7 @@
 	}
 	.share__icons {
 		display: flex;
-		span {
+		.fb, .vk {
 			display: block;
 			width: 24px;
 			height: 24px;

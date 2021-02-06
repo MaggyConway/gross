@@ -4,6 +4,7 @@
 		<div class="share__icons">
 			<ShareNetwork
 				network="facebook"
+				title=""
 				url="https://market.yandex.ru/shop--firmennyi-magazin-gross/545370/reviews"
 				quote="Отзывы о магазине Фирменный магазин GROSS"
 				hashtags="gross_market"

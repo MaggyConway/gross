@@ -1,19 +1,21 @@
 import Vue from 'vue'
 import router from 'vue-router'
-// import profile from '../components/profile.vue'
-// import table from '../components/table.vue'
+import MainContent from '../components/MainContent'
+import Interview from '../components/Interview'
+
 Vue.use(router)
+
 export default new router({
-  routes: [
-   //  {
-   //    path: '/profile',
-   //    name: 'profile',
-   //    component: profile
-   //  },
-   //  {
-   //    path: '/',
-   //    name: 'table',
-   //    component: table
-   //  }
-  ]
+	routes: [
+		{
+			path: '/',
+			name: 'MainContent',
+			component: MainContent
+		},
+		{
+			path: '/interview',
+			name: 'Interview',
+			component: Interview
+		}
+	]
 })

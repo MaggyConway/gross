@@ -1,5 +1,5 @@
 <template>
-  <header id="header" class="wrapper">
+  <header id="header" class="wrapper" :style="onInterview">
 		<logo />
 		<div class="flexbox">
 			<header-phone :tel="phone" />
@@ -10,20 +10,28 @@
 
 <script>
 import Logo from './Logo'
-import HeaderPhone from './header/HeaderPhone'
-import HeaderBtn from './header/HeaderBtn'
+import HeaderPhone from './HeaderPhone'
+import HeaderBtn from './HeaderBtn'
 
 export default {
 	name: 'Header',
 	data () {
 		return {
 			phone: '+7 (926) 433-14-16',
+			onInterview: ''
 		}
 	},
 	components: {
 		Logo,
 		HeaderPhone,
 		HeaderBtn
+	},
+	mounted: function () {
+		if (document.location.hash == '#/interview') {
+			this.onInterview = 'background: #F5F5F5'
+		} else {
+			this.onInterview = 'background: #fff'
+		}
 	}
 }
 </script>

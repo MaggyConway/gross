@@ -1,40 +1,28 @@
 <template>
 	<div id="app">
-		<header-comp></header-comp>
-		<main-slider />
-		<vacancies />
-		<insta />
-		<geography />
-		<footer-comp></footer-comp>
+		<header-comp />
+		<router-view />
+		<footer-comp />
 	</div>
 </template>
 
 <script>
 import HeaderComp from './components/Header'
-import MainSlider from './components/MainSlider'
-import Vacancies from './components/Vacancies'
-import Insta from './components/Insta'
-import Geography from './components/Geography'
-
 import FooterComp from './components/Footer'
 
 import './assets/fonts/fonts.css'
 
 export default {
-  name: 'App',
-  data () {
-    return {
+	name: 'App',
+	data () {
+		return {
 
+		}
+	},
+	components: {
+		HeaderComp,
+		FooterComp
 	}
-  },
-  components: {
-	  HeaderComp,
-	  MainSlider,
-	  Vacancies,
-	  Insta,
-	  Geography,
-	  FooterComp
-  }
 }
 </script>
 

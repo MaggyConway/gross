@@ -128,10 +128,13 @@
 </script>
 
 <style lang="scss">
-	.map-box, #map {
+	#map {
 		width: 100%;
 		height: 540px;
 		position: relative;
+		overflow: hidden;
+		-webkit-border-radius: 8px;
+				  border-radius: 8px;
 	}
 	.ymaps-2-1-78-ground-pane {
 		-webkit-filter: grayscale(100%);

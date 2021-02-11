@@ -38,8 +38,8 @@
 						</el-radio-group>
 					</el-form-item>
 
-					<el-form-item label="Контактый телефон *" prop="phone">
-						<el-input v-model="form.phone"></el-input>
+					<el-form-item label="Контактный телефон *" prop="phone">
+						<el-input v-model="form.phone" v-phone></el-input>
 					</el-form-item>
 
 					<el-form-item label="Электронная почта" prop="email">
@@ -67,12 +67,12 @@
 
 				<!-- captcha -->
 
-				<el-form-item>
+				<el-form-item prop="policy">
 					<el-checkbox id="agreePolicy" label="я подтверждаю согласие на обработку персональных данных и принимаю условия рассмотрения обращений *"></el-checkbox>
 				</el-form-item>
 
 				<el-form-item>
-					<el-button class="interview__btn-submit" @click="checkPolicy()">отправить</el-button>
+					<el-button class="interview__btn-submit" @click="submitForm('form')">отправить</el-button>
 				</el-form-item>
 
 			</el-form>
@@ -100,13 +100,29 @@
 </template>
 
 <script>
-// todo - выделение красным незаполненных полей!
-// todo - все поля проводить через checkEmpty, далее делать проверку по rule.field и перебрасывать на подходящие доп.валидаторы (например, email по типу)
+// todo - выделение красным незаполненных полей! (((errorClass = '' || 'error')))
+
 	export default {
 		name: 'Interview',
 		data () {
-			var checkEmpty = (rule, value, callback) => {
-				console.log(rule.field) // выводит запущенное правило валидации
+
+			var checkVacancy = (rule, value, callback) => {
+				if (value === '') {
+					callback(new Error('поле обязательно для заполнения'))
+				} else {
+					callback()
+				}
+			}
+
+			var checkName = (rule, value, callback) => {
+				if (value === '') {
+					callback(new Error('поле обязательно для заполнения'))
+				} else {
+					callback()
+				}
+			}
+
+			var checkDate = (rule, value, callback) => {
 				if (value === '') {
 					callback(new Error('поле обязательно для заполнения'))
 				} else {
@@ -115,15 +131,44 @@
 			}
 
 			var checkPhone = (rule, value, callback) => {
-
 				if (value === '') {
+					// todo
 					callback(new Error('поле обязательно для заполнения'))
 				} else {
-					if (value.length >=7) {
+					if (value.length >=14) {
 						callback()
 					} else {
+						// todo
 						callback(new Error('поле не заполнено до конца'))
 					}
+				}
+			}
+
+			var checkEmail = (rule, value, callback) => {
+				if (value === '') {
+					// todo
+					callback(new Error('поле обязательно для заполнения'))
+				} else {
+					var re = /\S+@\S+\.\S+/;
+    				var test = re.test(value);
+					if (test) {
+						callback()
+					} else {
+						// todo
+						callback(new Error('поле заполнено не корректно'))
+					}
+				}
+			}
+
+			var checkPolicy = (rule, value, callback) => {
+				let policy = document.getElementById('agreePolicy')
+				let checkbox = policy.querySelector('.el-checkbox__original')
+
+				if (checkbox.checked) {
+					callback()
+				} else {
+					// todo - красная заливка
+					callback(new Error('поле обязательно для заполнения'))
 				}
 			}
 
@@ -137,7 +182,7 @@
 					email: '',
 					summary: '',
 					files: '',
-					// policy: []
+					policy: false
 				},
 				labelPosition: 'top',
 				vacancies: [
@@ -152,21 +197,22 @@
 				rules: {
 					vacancy: [
 						{
-							validator: checkEmpty,
+							validator: checkVacancy,
 							trigger: 'change'
 						}
 					],
 					name: [
 						{
-							validator: checkEmpty,
+							validator: checkName,
 							trigger: 'blur'
 						}
 					],
-					date: [ // todo custom validator (с маской для даты дд.мм.гггг)
+					date: [ // todo custom validator (с маской для даты дд.мм.гггг) (type)
 						{
-							type: 'date',
-							required: true,
-							message: 'выберите дату',
+							// type: 'date',
+							// required: true,
+							// message: 'выберите дату',
+							validator: checkDate,
 							trigger: 'change'
 						}
 					],
@@ -176,42 +222,23 @@
 							trigger: 'blur'
 						}
 					],
-					email: [ // todo custom validator (по типу @mail)
+					email: [
 						{
-							type: 'email',
-							required: true,
-							message: 'поле обязательно для заполнения',
+							validator: checkEmail,
 							trigger: 'blur'
 						}
 					],
 					// captcha: [],
-					// policy: [ // todo custom validator (галочка не должна идти до всей 		      			валидации!)
-					// 	{
-					// 		required: true,
-					// 		// type: 'array', // todo
-					// 		message: 'поле обязательно для заполнения',
-					// 		trigger: 'change'
-					// 	}
-					// ],
+					policy: [
+						{
+							validator: checkPolicy,
+							trigger: 'change' // todo не видит тригер change на галочке
+						}
+					],
 				}
 			}
 		},
 		methods: {
-			checkPolicy () {
-				let policy = document.getElementById('agreePolicy')
-
-				let checkbox = policy.querySelector('.el-checkbox__original')
-
-				if (checkbox.checked) {
-					this.submitForm('form')
-				} else {
-					console.log('error submit!!');
-
-					// todo - красная заливка
-
-					return false;
-				}
-			},
 			submitForm(formName) {
 				this.$refs[formName].validate((valid) => {
 					if (valid) {
@@ -222,6 +249,25 @@
 						return false;
 					}
 				});
+			}
+		},
+		directives: {
+			phone: {
+				bind(el) {
+					el.oninput = function(e) {
+						if (!e.isTrusted) {
+							return;
+						}
+
+						let input_tag = this.querySelector('.el-input__inner')
+
+						console.log(input_tag.value)
+
+						const x = input_tag.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+						input_tag.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+						el.dispatchEvent(new Event('input'));
+					}
+				},
 			}
 		}
 	}
